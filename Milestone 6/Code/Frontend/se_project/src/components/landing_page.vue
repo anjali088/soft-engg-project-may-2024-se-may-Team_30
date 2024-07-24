@@ -1,18 +1,20 @@
 <template>
-    <div>
-        <HeaderBar></HeaderBar>
-        <h1>Landing Page.</h1>
-    </div>
+    <HeaderBar></HeaderBar>
+    <SideBar></SideBar>
 </template>
+
+
 
 <script>
 
 import HeaderBar from './header.vue';
+import SideBar from './sidebar.vue';
 
 export default{
     name: 'LandingPage',
     components: {
-        HeaderBar
+        HeaderBar,
+        SideBar
     }
 }
 </script>
