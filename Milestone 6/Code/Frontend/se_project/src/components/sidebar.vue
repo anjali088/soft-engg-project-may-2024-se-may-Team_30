@@ -39,7 +39,7 @@
   <style scoped>
   /* Styles for the sidebar container */
   .sidebar {
-    width: 200px;
+    width: 70px;
     background-color: #465A74;
     color: white;
     display: flex;
@@ -56,6 +56,7 @@
     width: 100%;
     text-align: left;
     cursor: pointer;
+    flex-direction: column;
   }
   /* Margin for icons within sidebar items */
   .sidebar-item i {
