@@ -7,6 +7,7 @@
         <SideBar></SideBar>
         <!-- Include the contentSidebar component -->
         <contentSidebar></contentSidebar>
+        <ContentBox></ContentBox>
     </div>
     
 </template>
@@ -16,13 +17,15 @@
 import HeaderBar from './header.vue';
 import SideBar from './sidebar.vue';
 import contentSidebar from './contentSidebar.vue'
+import ContentBox from './content.vue'
 
 export default{
     name: 'LandingPage',
     components: {
         HeaderBar,
         SideBar,
-        contentSidebar
+        contentSidebar,
+        ContentBox
     }
 }
 </script>
