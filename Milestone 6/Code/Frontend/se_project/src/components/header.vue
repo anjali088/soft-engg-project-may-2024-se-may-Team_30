@@ -1,12 +1,16 @@
 <template>
+  <!-- Header container -->
     <div class="header">
+      <!-- Left side of the header contatining the logo and title -->
       <div class="header-left">
         <img src="@/assets/logo.jpg" alt="IIT Madras Logo" class="logo" />
         <span class="title">IIT Madras</span>
       </div>
+      <!-- center part of the header with a text span -->
       <div class="header-center">
         <span>May 2024 - Software Engineering</span>
       </div>
+      <!-- Right side of the header containing the email and sign-out icon -->
       <div class="header-right">
         <span>21f1002317@ds.study.iitm.ac.in</span>
         <i class="fas fa-sign-out-alt"></i>
@@ -21,6 +25,7 @@
   </script>
   
   <style scoped>
+  /* Styles for the header container */
   .header {
     display: flex;
     align-items: center;
@@ -31,33 +36,39 @@
     border-bottom: 1px solid #E5E7EB;
   }
   
+  /* Styles for the left side of the header */
   .header-left {
     display: flex;
     align-items: center;
   }
   
+  /* Styles for the logo image */
   .logo {
     height: 40px;
     margin-right: 10px;
   }
   
+  /* Styles for the title text  */
   .title {
     font-weight: bold;
     font-size: 18px;
   }
   
+  /* Styles for the center part of the header */
   .header-center {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
   }
   
+  /* Styles for the right side of the header */
   .header-right {
     display: flex;
     align-items: center;
     font-size: 14px;
   }
   
+  /* Styles for the sign-out icon */
   .header-right i {
     margin-left: 10px;
     cursor: pointer;
