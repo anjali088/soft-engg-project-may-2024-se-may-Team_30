@@ -24,15 +24,26 @@
       </div>
       <!-- Sidebar item for calculator -->
       <div class="sidebar-item">
-        <i class="fas fa-calculator"></i>
+        <i class="fas fa-calculator open-calculator" @click="showCalculator"></i>
+        <CalculatorBox ref="calculator"></CalculatorBox>
         <span>Calc</span>
       </div>
     </div>
   </template>
   
   <script>
+  import CalculatorBox from './calculator.vue';
+
   export default {
-    name: 'SideBar'
+    name: 'SideBar',
+    components: {
+      CalculatorBox
+    },
+    methods: {
+      showCalculator(){
+        this.$refs.calculator.openCalculator()
+      }
+    }
   }
   </script>
   
@@ -73,6 +84,16 @@
   /* Hover effect of sidebar items */
   .sidebar-item:hover {
     background-color: #3a4d66;
+  }
+
+  i.open-calculator{
+    padding: 10px 20px;
+    font-size: 1em;
+    background: #444;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
   }
   </style>
   

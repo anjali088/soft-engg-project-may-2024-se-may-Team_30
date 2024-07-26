@@ -16,8 +16,9 @@
 
 import HeaderBar from './header.vue';
 import SideBar from './sidebar.vue';
-import contentSidebar from './contentSidebar.vue'
-import ContentBox from './content.vue'
+import contentSidebar from './contentSidebar.vue';
+import ContentBox from './content.vue';
+
 
 export default{
     name: 'LandingPage',
