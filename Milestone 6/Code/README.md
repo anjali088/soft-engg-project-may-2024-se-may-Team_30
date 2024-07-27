@@ -12,3 +12,5 @@ Demo of integrating GenAI in IIT Madras seek portal.
 
 1. Add FonAwesome Icons.
     npm install @fortawesome/fontawesome-free
+2. Install all python packages in requirements.txt
+    pip install -r requirements.txt
