@@ -40,6 +40,11 @@
             isOpen: false,
             items: ["Lecture 1", "Assignment 1"]
           },
+          {
+            title: "Week 2",
+            isOpen: false,
+            items: ['l1']
+          }
           // Add other sections here...
         ]
       };
