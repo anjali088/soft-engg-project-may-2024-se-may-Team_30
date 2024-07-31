@@ -1,0 +1,654 @@
+openapi: 3.0.0
+info:
+  version: "2.0.0"
+  title: Super Seek API
+  description: API for Super Seek
+
+servers:
+  - url: "http://localhost:5000"
+    description: Local server
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    DatabaseConfig:
+      type: object
+      properties:
+        SQLALCHEMY_DATABASE_URI:
+          type: string
+          example: "postgresql://user:password@localhost:5432/advanced_learning_db"
+        SECRET_KEY:
+          type: string
+          example: "your_secret_key_here"
+        DEBUG:
+          type: boolean
+          example: false
+        TESTING:
+          type: boolean
+          example: false
+
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        date_joined:
+          type: string
+          format: date-time
+        last_login:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+        is_admin:
+          type: boolean
+    Content:
+      type: object
+      properties:
+        content_id:
+          type: integer
+        week:
+          type: integer
+        title:
+          type: string
+        content_type:
+          type: string
+        creation_date:
+          type: string
+          format: date-time
+        last_updated:
+          type: string
+          format: date-time
+    Lecture:
+      type: object
+      properties:
+        lec_id:
+          type: integer
+        title:
+          type: string
+        week:
+          type: integer
+        content_id:
+          type: integer
+        video_url:
+          type: string
+        transcript:
+          type: string
+        duration:
+          type: integer
+        difficulty_level:
+          type: string
+    Assignment:
+      type: object
+      properties:
+        assign_id:
+          type: integer
+        title:
+          type: string
+        week:
+          type: integer
+        content_id:
+          type: integer
+        due_date:
+          type: string
+          format: date-time
+        total_points:
+          type: integer
+    Question:
+      type: object
+      properties:
+        que_id:
+          type: integer
+        assignment_id:
+          type: integer
+        question_text:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correct_answer:
+          type: string
+        points:
+          type: integer
+        difficulty:
+          type: string
+    UserQuestion:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        question_id:
+          type: integer
+        assignment_id:
+          type: integer
+        selected_answer:
+          type: string
+        code_submission:
+          type: string
+        is_correct:
+          type: boolean
+        submission_time:
+          type: string
+          format: date-time
+        points_earned:
+          type: integer
+    Course:
+      type: object
+      properties:
+        course_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        instructor_id:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        is_active:
+          type: boolean
+    CourseEnrollment:
+      type: object
+      properties:
+        enrollment_id:
+          type: integer
+        user_id:
+          type: integer
+        course_id:
+          type: integer
+        enrollment_date:
+          type: string
+          format: date-time
+        completion_date:
+          type: string
+          format: date-time
+        is_completed:
+          type: boolean
+paths:
+
+  /login:
+    post:
+      summary: Login endpoint for users.
+      requestBody:
+        description: User login credentials.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: your_password
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+                  token:
+                    type: string
+                    example: your_jwt_token
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid credentials
+
+  /contents:
+    get:
+      summary: Display available weeks for content.
+      responses:
+        '200':
+          description: A list of weeks with available content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  weeks:
+                    type: array
+                    items:
+                      type: integer
+                    example: [1, 2, 3, 4]
+
+  /contents/{week}:
+    get:
+      summary: Display titles of lectures and quizzes for a particular week.
+      parameters:
+        - in: path
+          name: week
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: A list of content titles for the specified week
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  week:
+                    type: integer
+                    example: 1
+                  lectures:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lec_id:
+                          type: integer
+                          example: 101
+                        title:
+                          type: string
+                          example: Introduction to Python
+                  assignments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        assign_id:
+                          type: integer
+                          example: 201
+                        title:
+                          type: string
+                          example: Week 1 Quiz
+
+  /lec/{lec_id}/{week}:
+    get:
+      summary: Display lecture video when clicking on lecture title.
+      parameters:
+        - in: path
+          name: lec_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: week
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: The lecture video and details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lec_id:
+                    type: integer
+                    example: 101
+                  week:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Introduction to Python
+                  video_url:
+                    type: string
+                    example: http://example.com/video.mp4
+                  transcript:
+                    type: string
+                    example: This is the transcript of the lecture.
+
+  /assignment/{assign_id}/{week}:
+    get:
+      summary: Display assignment when clicking on assignment title.
+      parameters:
+        - in: path
+          name: assign_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+        - in: path
+          name: week
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: The assignment details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assign_id:
+                    type: integer
+                    example: 201
+                  week:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Week 1 Quiz
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        que_id:
+                          type: integer
+                          example: 301
+                        question_text:
+                          type: string
+                          example: What is the output of print(2 + 2)?
+                        options:
+                          type: array
+                          items:
+                            type: string
+                          example: ["2", "3", "4", "5"]
+                        correct_answer:
+                          type: string
+                          example: 4
+
+  /solve_assignment/{assign_id}:
+    post:
+      summary: Submit a particular assignment.
+      parameters:
+        - in: path
+          name: assign_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+      requestBody:
+        description: Submission details for the assignment.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                question_id:
+                  type: integer
+                  example: 301
+                selected_answer:
+                  type: string
+                  example: 4
+                code_submission:
+                  type: string
+                  example: |
+                    def add(a, b):
+                        return a + b
+              required:
+                - user_id
+                - question_id
+                - selected_answer
+      responses:
+        '200':
+          description: Successful assignment submission
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Assignment submitted successfully
+                  is_correct:
+                    type: boolean
+                    example: true
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid submission data
+
+  /get_summary/{lec_id}:
+    get:
+      summary: Generate summary for a specific lecture.
+      parameters:
+        - in: path
+          name: lec_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: The lecture summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lec_id:
+                    type: integer
+                    example: 101
+                  summary:
+                    type: string
+                    example: This lecture covers the basics of Python.
+  
+  /feedback/{assign_id}:
+    get:
+      summary: Get feedback for incorrect answers in a specific assignment.
+      parameters:
+      - in: path
+        name: assign_id
+        required: true
+        schema:
+          type: integer
+          example: 201
+      responses:
+        200:
+          description: Feedback for incorrect answers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assign_id:
+                    type: integer
+                    example: 201
+                  feedback:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        question_id:
+                          type: integer
+                          example: 301
+                        feedback_text:
+                          type: string
+                          example: The correct answer is 4 because 2 + 2 equals 4.
+
+  /get_links/{lec_id}:
+    get:
+      summary: Get links related to a particular lecture.
+      parameters:
+      - in: path
+        name: lec_id
+        required: true
+        schema:
+          type: integer
+          example: 101
+      responses:
+        200:
+          description: Links related to the lecture
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lec_id:
+                    type: integer
+                    example: 101
+                  links:
+                    type: array
+                    items:
+                      type: string
+                    example: ["http://example.com/link1", "http://example.com/link2"]
+
+  /make_data/{que_id}:
+    get:
+      summary: Generate synthetic data for a specific question.
+      parameters:
+      - in: path
+        name: que_id
+        required: true
+        schema:
+          type: integer
+          example: 301
+      responses:
+        200:
+          description: Generated data for the question
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  que_id:
+                    type: integer
+                    example: 301
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        input:
+                          type: string
+                          example: 2 + 2
+                        output:
+                          type: string
+                          example: 4
+  
+  /logout:
+    post:
+      summary: Logout endpoint for users.
+      responses:
+        200:
+          description: Successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successful
+
+  /courses:
+    get:
+      summary: Display available courses.
+      responses:
+        200:
+          description: A list of available courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    course_id:
+                      type: integer
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    instructor:
+                      type: string
+                    start_date:
+                      type: string
+                      format: date
+  
+  /enroll/{course_id}:
+    post:
+      summary: Enroll in a course.
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful enrollment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully enrolled in the course
+
+  /progress/{course_id}:
+    get:
+      summary: Get user's progress in a specified course.
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: User's progress in the course
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  course_id:
+                    type: integer
+                  progress:
+                    type: number
+                    format: float
+                  completed_lectures:
+                    type: integer
+
+security:
+  - basicAuth: []
