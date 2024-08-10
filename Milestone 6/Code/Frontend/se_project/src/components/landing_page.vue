@@ -8,7 +8,9 @@
         <!-- Include the contentSidebar component -->
         <contentSidebar></contentSidebar>
         <ContentBox></ContentBox>
+        <chat></chat>
     </div>
+    
     
 </template>
 
@@ -18,6 +20,7 @@ import HeaderBar from './header.vue';
 import SideBar from './sidebar.vue';
 import contentSidebar from './contentSidebar.vue';
 import ContentBox from './content.vue';
+import chat from './chat.vue'
 
 
 export default{
@@ -26,7 +29,8 @@ export default{
         HeaderBar,
         SideBar,
         contentSidebar,
-        ContentBox
+        ContentBox,
+        chat
     }
 }
 </script>
