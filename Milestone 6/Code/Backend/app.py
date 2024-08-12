@@ -17,7 +17,7 @@ app.config.from_object(Config)
 api = Api(app)
 
 # Initialize Flask-Caching
-cache = Cache(app)
+# cache = Cache(app)
 
 # Initialize Flask-JWT-Extended for JWT support
 jwt = JWTManager(app)
