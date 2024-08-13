@@ -8,7 +8,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLITE_DB_DIR = os.path.join(basedir, "db_directory")
 print(SQLITE_DB_DIR)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(SQLITE_DB_DIR, 'superSeek.sqlite3')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(SQLITE_DB_DIR, 'database.sqlite3')
 SECRET_KEY = 'thisisasecretkey'
 app.secret_key = SECRET_KEY
 db = SQLAlchemy()
