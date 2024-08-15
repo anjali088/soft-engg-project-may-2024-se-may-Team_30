@@ -22,7 +22,6 @@ import contentSidebar from './contentSidebar.vue';
 import ContentBox from './content.vue';
 import chat from './chat.vue'
 
-
 export default{
     name: 'LandingPage',
     components: {
@@ -31,7 +30,7 @@ export default{
         contentSidebar,
         ContentBox,
         chat
-    }
+    },
 }
 </script>
 

@@ -27,16 +27,6 @@
       return {
         sections: [
           {
-            title: "Course Introduction",
-            isOpen: false,
-            items: ["Introduction Video", "Syllabus", "Instructor Info"]
-          },
-          {
-            title: "Course Project",
-            isOpen: false,
-            items: ["Project Overview", "Requirements"]
-          },
-          {
             title: "Week 1",
             isOpen: false,
             items: ["Lecture 1", "Assignment 1"]
@@ -46,7 +36,6 @@
             isOpen: false,
             items: ['l1']
           }
-          // Add other sections here...
         ]
       };
     },
@@ -56,18 +45,25 @@
         this.sections.forEach((section, idx) => {
           section.isOpen = idx === index ? !section.isOpen : false;
         });
-      }
-    },
-    async getContent(){
+      },
+    
+    getContent(){
       const path = 'http://127.0.0.1:5000/contents';
-      axios.get(path)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.error(error)
-        });
+            axios.get(path)
+                .then((res)=>{
+                    console.log("Here");
+                    console.log(res.data);
+                    localStorage.setItem('content', JSON.stringify(res.data));
+                    this.sections = res.data;
+                })
+                .catch((error)=>{
+                    console.log(error);
+                });
     },
+  },
+  created(){
+      this.getContent();
+    }
   }
   </script>
   

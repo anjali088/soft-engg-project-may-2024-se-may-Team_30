@@ -23,7 +23,7 @@
   
   <script>
   export default {
-    name: 'ContentBox'
+    name: 'ContentBox',
   }
   </script>
   
