@@ -1,24 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+#from flask_cors import CORS
 from sqlalchemy import JSON
 import ollama
 import os
 from datetime import datetime
-
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLITE_DB_DIR = os.path.join(basedir, "db_directory")
 print(SQLITE_DB_DIR)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(SQLITE_DB_DIR, 'database.sqlite3')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(SQLITE_DB_DIR, 'database1.sqlite3')
 SECRET_KEY = 'thisisasecretkey'
 app.secret_key = SECRET_KEY
 db = SQLAlchemy()
 db.init_app(app)
 app.app_context().push()
 
-CORS(app, resources={r'/*': {'origins': '*'}})
-
+#CORS(app, resources={r'/*': {'origins': '*'}})
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -37,6 +35,7 @@ class Content(db.Model):
     content_type = db.Column(db.String(50), nullable=False)  # To know if the given content is Lec or Assign
     lecture = db.relationship('Lecture', backref='content')
     assignment = db.relationship('Assignment', backref='content')
+    isopen = db.Column(db.Boolean())
 
 
 class Lecture(db.Model):
@@ -81,7 +80,7 @@ class UserQuestion(db.Model):
     is_correct = db.Column(db.Boolean, nullable=False)
 
 
-# db.create_all()
+#db.create_all()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -255,6 +254,36 @@ def submit_assignment(assignment_id):
     }
     return jsonify(response_data), 201
 
+
+@app.route('/content', methods=['GET'])
+def get_content():
+    sections = []
+
+    # Query all distinct weeks from the Content table
+    weeks = db.session.query(Content.week).distinct().order_by(Content.week).all()
+
+    # For each week, collect associated lectures and assignments
+    for week_tuple in weeks:
+        week = week_tuple.week
+
+        # Fetch lectures and assignments for the current week
+        lectures = Lecture.query.filter_by(week=week).all()
+        assignments = Assignment.query.filter_by(week=week).all()
+        content = Content.query.filter_by(week=week).first()
+
+        # Create a list of dictionaries with id and title for items in the current week
+        items = [{"id": lec.lec_id, "title": lec.title} for lec in lectures] + \
+                [{"id": assign.assign_id, "title": assign.title} for assign in assignments]
+
+        # Add the current week section to the sections list
+        sections.append({
+            "title": content.title,
+            "isOpen": content.isopen,
+            "items": items
+        })
+
+    # Return the sections as JSON
+    return jsonify({"sections": sections}), 200
 
 
 if __name__ == '__main__':
