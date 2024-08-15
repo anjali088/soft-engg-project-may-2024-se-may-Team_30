@@ -194,6 +194,7 @@ def get_lec_summary(lec_id):
     summary = ollama.generate(model='phi3', prompt=f'Give me a summary of this lecture: {lecture.transcript}')
     return jsonify({'summary': summary['response']})
 
+#For getting links
 @app.route('/get_links/<int:lec_id>', methods=['GET'])
 def get_lec_links(lec_id):
     lecture = Lecture.query.get(lec_id)
