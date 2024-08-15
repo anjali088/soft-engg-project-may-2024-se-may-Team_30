@@ -7,7 +7,13 @@ const routes=[
         path: '/',
         name: 'LandingPage',
         component: LandingPage
+    },
+    {
+        path: '/detail/:id',
+        name: 'content',
+        component: () => import('../components/landing_page.vue')
     }
+
 ]
 
 const router=createRouter({

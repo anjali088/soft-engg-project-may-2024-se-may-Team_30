@@ -26,6 +26,7 @@ class Content(db.Model):
     content_type = db.Column(db.String(50), nullable=False)
     creation_date = db.Column(db.DateTime)
     last_updated = db.Column(db.DateTime)
+    isopen = db.Column(db.Boolean())
     lecture = db.relationship('Lecture', backref='content', lazy=True)
     assignment = db.relationship('Assignment', backref='content', lazy=True)
 
