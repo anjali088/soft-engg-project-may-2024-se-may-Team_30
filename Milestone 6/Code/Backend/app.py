@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
-#from flask_cors import CORS
+from flask_cors import CORS
 from sqlalchemy import JSON
 import ollama
 import os
@@ -16,7 +16,7 @@ db = SQLAlchemy()
 db.init_app(app)
 app.app_context().push()
 
-#CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 class User(db.Model):
     __tablename__ = 'users'
