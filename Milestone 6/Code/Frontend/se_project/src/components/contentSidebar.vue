@@ -12,7 +12,12 @@
       <div v-if="section.isOpen" class="section-content">
         <ul>
           <!-- Loop through items to create list items -->
-          <li v-for="item in section.items" :key="item.id">{{ item.title }}</li>
+          <li 
+            v-for="item in section.items" 
+            :key="item.id"
+            @click="handleItemClick(item.id, item.title)">
+            {{ item.title }}
+          </li>
         </ul>
       </div>
     </div>
@@ -35,6 +40,12 @@ export default {
       this.sections.forEach((section, idx) => {
         section.isOpen = idx === index ? !section.isOpen : false;
       });
+    },
+    // Handle item click
+    handleItemClick(id){
+      console.log('Clicked');
+      // Emit am evemt to the parent component with the item's id and title
+      this.$router.push({ name: 'content', params: { id } });
     },
     // Fetch content from the server
     getContent() {

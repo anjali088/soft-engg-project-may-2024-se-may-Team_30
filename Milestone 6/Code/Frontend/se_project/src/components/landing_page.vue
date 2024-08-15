@@ -31,6 +31,12 @@ export default{
         ContentBox,
         chat
     },
+    methods: {
+        onItemClicked(item){
+            console.log("I am here ");
+            this.selectedItem = item;
+        }
+    }, 
 }
 </script>
 
