@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import JSON
 import ollama
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -102,46 +103,6 @@ def logout():
     else:
         return jsonify({'message': 'Login First'})
 
-
-@app.route('/view_assignment/<int:assignment_id>')
-def view_assignment(assignment_id):
-    assignment = Assignment.query.filter_by(assign_id=assignment_id).first_or_404()
-    questions = Question.query.filter_by(assignment_id=assignment_id).all()
-
-    assignment_data = {
-        'assignment_id': assignment.assign_id,
-        'title': assignment.title,
-        'week': assignment.week,
-        'questions': []
-    }
-
-    for question in questions:
-        question_data = {
-            'question_id': question.que_id,
-            'question_text': question.question_text,
-            'options': question.options,
-            'correct_answer': question.correct_answer
-        }
-        assignment_data['questions'].append(question_data)
-
-    return jsonify(assignment_data)
-
-
-@app.route('/quiz/<int:quiz_id>/questions', methods=['GET'])
-def get_questions_for_quiz(quiz_id):
-    """Retrieve all questions for a specific quiz."""
-    questions = Question.query.filter_by(quiz_id=quiz_id).all()
-    questions_list = []
-    for question in questions:
-        questions_list.append({
-            'id': question.id,
-            'question_text': question.question_text,
-            'options': question.options,
-            'correct_answer': question.correct_answer
-        })
-    return jsonify(questions_list), 200
-
-
 @app.route('/contents', methods=['GET'])
 # To display list of weeks
 def get_weeks():
@@ -164,6 +125,17 @@ def get_content_titles(week):
     return jsonify({
         "lectures": lecture_list,
         "assignments": assignment_list
+    }), 200
+
+@app.route('/lec/<int:lec_id>/<int:week>', methods=['GET'])
+def get_lecture(lec_id, week):
+    lecture = Lecture.query.filter_by(lec_id=lec_id, week=week).first_or_404()
+    return jsonify({
+        "lec_id": lecture.lec_id,
+        "week": lecture.week,
+        "title": lecture.title,
+        "video_url": lecture.video_url,
+        "transcript": lecture.transcript
     }), 200
 
 
@@ -219,23 +191,66 @@ def get_lec_summary(lec_id):
     summary = ollama.generate(model='phi3', prompt=f'Give me a summary of this lecture: {lecture.transcript}')
     return jsonify({'summary': summary['response']})
 
+@app.route('/get_links/<int:lec_id>', methods=['GET'])
+def get_lec_links(lec_id):
+    lecture = Lecture.query.get(lec_id)
+    links = ollama.generate(model='llama3', prompt=f'f Give me links to study more about this topic: {lecture.title}')
+    return jsonify({'links': links['response']})
 
-@app.route('/user/<int:user_id>/answered_questions/<int:question_id>', methods=['GET'])
-def get_specific_answered_question(user_id, question_id):
-    """Retrieve a specific question answered by a user that is correct."""
-    answer = UserQuestion.query.filter_by(user_id=user_id, question_id=question_id, is_correct=False).first()
-    if not answer:
-        return jsonify({'message': 'No correct answer found for this question by the user'}), 404
 
-    question = Question.query.get(answer.question_id)
-    result = {
-        'question_text': question.question_text,
-        'selected_answer': answer.selected_answer,
-        'is_correct': answer.is_correct,
-        'correct_answer': question.correct_answer
+@app.route('/submit_assignment/<int:assignment_id>', methods=['POST'])
+def submit_assignment(assignment_id):
+    data = request.get_json()
+
+    user_id = data.get('user_id')
+    submitted_answers = data.get('answers', [])
+
+    if not user_id or not submitted_answers:
+        return jsonify({'error': 'User ID and answers are required'}), 400
+
+    # Fetch the assignment to ensure it exists
+    assignment = Assignment.query.filter_by(assign_id=assignment_id).first_or_404()
+
+    total_points_earned = 0
+
+    for answer in submitted_answers:
+        question_id = answer.get('question_id')
+        selected_answer = answer.get('selected_answer')
+        code_submission = answer.get('code_submission')  # Optional, if applicable
+
+        # Fetch the question
+        question = Question.query.filter_by(que_id=question_id, assignment_id=assignment_id).first_or_404()
+
+        # Check if the selected answer is correct
+        is_correct = (question.correct_answer == selected_answer)
+        points_earned = question.points if is_correct else 0
+        total_points_earned += points_earned
+
+        # Record the submission in the UserQuestion table
+        user_question = UserQuestion(
+            user_id=user_id,
+            question_id=question_id,
+            assignment_id=assignment_id,
+            selected_answer=selected_answer,
+            code_submission=code_submission,
+            is_correct=is_correct,
+            submission_time=datetime.utcnow(),
+            points_earned=points_earned
+        )
+
+        db.session.add(user_question)
+
+    # Commit all changes to the database
+    db.session.commit()
+
+    response_data = {
+        'assignment_id': assignment_id,
+        'user_id': user_id,
+        'total_points_earned': total_points_earned,
+        'status': 'Submission successful'
     }
+    return jsonify(response_data), 201
 
-    return render_template('answer.html')
 
 
 if __name__ == '__main__':
