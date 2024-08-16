@@ -15,7 +15,7 @@
           <li 
             v-for="item in section.items" 
             :key="item.id"
-            @click="handleItemClick(item.video_url)">
+            @click.prevent="handleItemClick(item.video_url, item.title)">
             {{ item.title }}
           </li>
         </ul>
@@ -42,11 +42,10 @@ export default {
       });
     },
     // Handle item click
-    handleItemClick(url){
+    handleItemClick(url, title){
       console.log(url);
       // Emit am evemt to the parent component with the item's id and title
-      localStorage.setItem('url', url);
-      this.$router.push({ name: 'content', params: { url } });
+      this.$emit('change-video', url, title); //Emit an event with the video url.
     },
     // Fetch content from the server
     getContent() {

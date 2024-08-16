@@ -6,8 +6,8 @@
         <!-- Include the SideBar component -->
         <SideBar></SideBar>
         <!-- Include the contentSidebar component -->
-        <contentSidebar></contentSidebar>
-        <ContentBox></ContentBox>
+        <contentSidebar @change-video="updateVideoUrl"></contentSidebar>
+        <ContentBox :video-url="videoUrl" :video-title="videoTitle"></ContentBox>
         <chat></chat>
     </div>
     
@@ -34,18 +34,17 @@ export default{
     },
     data(){
       return {
-        url: '' // Initiaize video url as an empty string.
+        videoUrl: '', // Initiaize video url as an empty string.
+        videoTitle: ''
       };
     },
     methods: {
-        onItemClicked(){
-            console.log('url');
+        updateVideoUrl(url, title){
+            this.videoUrl = url; // Update the video URL when a link is clicked.
+            this.videoTitle = title;
         }
-    }, 
-    created(){
-        this.onItemClicked();
     }
-}
+};
 </script>
 
 <style scoped>

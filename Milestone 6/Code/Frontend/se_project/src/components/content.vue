@@ -1,7 +1,7 @@
 <template>
     <div class="content-box">
       <!-- Title of the content -->
-      <h1 class="content-title">1.1 Deconstructing the Software Development Process - Introduction</h1>
+      <h1 class="content-title">{{videoTitle}}</h1>
       <!-- Rating and review section -->
       <div class="content-meta">
         <span class="rating">- / 5 (0 reviews)</span>
@@ -12,7 +12,8 @@
         <iframe 
           width="560" 
           height="315" 
-          :src="videoUrl" 
+          :src="videoUrl"
+          :key="videoUrl"
           frameborder="0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
@@ -24,27 +25,16 @@
   <script>
   export default {
     name: 'ContentBox',
-    data(){
-      return {
-        videoUrl: '' // Initiaize video url as an empty string.
-      };
-    },
-    methods: {
-      loadVideoUrl() {
-        console.log("video");
-        // Fetch the video URL from localStorage
-        const url = localStorage.getItem('url');
-        console.log(url);
-        if (url) {
-          this.videoUrl = url;
-        } else {
-          // Set a default URL or handle the case where no URL is found
-          this.videoUrl = 'https://www.youtube.com/embed/default_video_id';
-        }
-      }
-    },
-    created(){
-      this.loadVideoUrl();
+    props: {
+      videoUrl: {
+        type: String,
+        required: true
+      },
+      videoTitle: {
+        type: String,
+        required: true
+      },
+
     }
   }
   </script>
@@ -90,8 +80,8 @@
     overflow: hidden;
     padding-top: 56.25%;
     position: relative;
-    width: 100%;
-    height: 0;
+    width: 50rem;
+    height: 10rem;
   }
   
   .video-container iframe {

@@ -11,7 +11,8 @@ const routes=[
     {
         path: '/detail/:id',
         name: 'content',
-        component: () => import('../components/landing_page.vue')
+        component: () => import('../components/landing_page.vue'),
+        props: true
     }
 
 ]
