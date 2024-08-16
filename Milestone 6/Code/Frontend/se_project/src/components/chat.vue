@@ -1,89 +1,129 @@
 <template>
-    <div class="chat-container" :class="{ minimized: isMinimized }">
-      <div class="chat-window">
-        <div class="chat-header">
-          SuperSeek Bot
-          <button class="minimize-button" @click="toggleMinimize">
-            {{ isMinimized ? '▲' : '▼' }}
-          </button>
+  <div class="chat-container" :class="{ minimized: isMinimized }">
+    <div class="chat-window">
+      <div class="chat-header">
+        SuperSeek Bot
+        <button class="minimize-button" @click="toggleMinimize">
+          {{ isMinimized ? '▲' : '▼' }}
+        </button>
+      </div>
+      <div v-if="!isMinimized">
+        <div class="prefix-options">
+          <button @click="handleSummaryClick">Summary</button>
+          <button @click="handleBClick">B</button>
+          <button @click="handleCClick">C</button>
+          <button @click="handleDClick">D</button>
         </div>
-        <div v-if="!isMinimized">
-          <div class="prefix-options">
-            <button v-for="(prefix, index) in prefixes" :key="index" @click="selectPrefix(prefix)">
-              {{ prefix }}
-            </button>
+        <div ref="chatMessages" class="chat-messages">
+          <div v-for="(message, index) in messages" :key="index" :class="['chat-message', message.sender]">
+            {{ message.text }}
           </div>
-          <div ref="chatMessages" class="chat-messages">
-            <div v-for="(message, index) in messages" :key="index" :class="['chat-message', message.sender]">
-              {{ message.text }}
-            </div>
-          </div>
-          <div class="chat-bar">
-            <input
-              type="text"
-              v-model="newMessage"
-              @keyup.enter="sendMessage"
-              placeholder="Type your message..."
-            />
-            <button @click="sendMessage">Send</button>
-          </div>
+        </div>
+        <div class="chat-bar">
+          <input
+            type="text"
+            v-model="newMessage"
+            @keyup.enter="sendMessage"
+            placeholder="Type your message..."
+          />
+          <button @click="sendMessage">Send</button>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name:'chatBox',
-    data() {
-      return {
-        newMessage: '',
-        messages: [],
-        isMinimized: false,
-        prefixes: ['A', 'B', 'C', 'D'],
-      };
-    },
-    methods: {
-      sendMessage() {
-        if (this.newMessage.trim() !== '') {
-          this.messages.push({ text: this.newMessage, sender: 'user' });
-          this.newMessage = '';
-          this.simulateAiResponse();
-          this.scrollToBottom();
-        }
-      },
-      simulateAiResponse() {
-        setTimeout(() => {
-          this.messages.push({ text: 'AI response goes here...', sender: 'ai' });
-          this.scrollToBottom();
-        }, 1000);
-      },
-      toggleMinimize() {
-        this.isMinimized = !this.isMinimized;
-      },
-      selectPrefix(prefix) {
-        this.messages.push({ text: prefix, sender: 'user' });
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+export default {
+  name: 'chatBox',
+  props: {
+    lectureId: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+      newMessage: '',
+      messages: [],
+      isMinimized: false,
+      prefixes: ['Summary', 'B', 'C', 'D'],
+    };
+  },
+  methods: {
+    sendMessage() {
+      if (this.newMessage.trim() !== '') {
+        this.messages.push({ text: this.newMessage, sender: 'user' });
+        this.newMessage = '';
         this.simulateAiResponse();
         this.scrollToBottom();
-      },
-      scrollToBottom() {
-        this.$nextTick(() => {
-          const chatMessages = this.$refs.chatMessages;
-          if (chatMessages) {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-          }
-        });
-      },
+      }
     },
-  };
-  </script>
+    response(res){
+      setTimeout(() => {
+        console.log(res);
+        this.messages.push({text: res, sender: 'ai'});
+        this.scrollToBottom();
+      }, 10);
+    },
+    simulateAiResponse() {
+      setTimeout(() => {
+        this.messages.push({ text: 'AI response goes here...', sender: 'ai' });
+        this.scrollToBottom();
+      }, 1000);
+    },
+    toggleMinimize() {
+      this.isMinimized = !this.isMinimized;
+    },
+    handleSummaryClick() {
+      this.messages.push({ text: 'Summary', sender: 'user' });
+      console.log("lecture ID",localStorage.getItem('lec_id'));
+      const lecId = localStorage.getItem('lec_id');
+      const path = `http://127.0.0.1:5000/get_summary/${lecId}`;
+      axios.get(path)
+        .then((res)=>{
+          this.response(res.data.summary);
+        })
+        .catch((error)=>{
+          console.log("Error fetching summary:", error);
+        })
+      // this.simulateAiResponse();
+      this.scrollToBottom();
+    },
+    handleBClick() {
+      this.messages.push({ text: 'B', sender: 'user' });
+      this.simulateAiResponse();
+      this.scrollToBottom();
+    },
+    handleCClick() {
+      this.messages.push({ text: 'C', sender: 'user' });
+      this.simulateAiResponse();
+      this.scrollToBottom();
+    },
+    handleDClick() {
+      this.messages.push({ text: 'D', sender: 'user' });
+      this.simulateAiResponse();
+      this.scrollToBottom();
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const chatMessages = this.$refs.chatMessages;
+        if (chatMessages) {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      });
+    },
+  },
+};
+</script>
   
   <style scoped>
   .chat-container {
     position: fixed;
     bottom: 0;
     right: 0;
-    width: 300px;
+    width: 600px;
     border: 1px solid #ccc;
     background-color: white;
     border-radius: 8px;

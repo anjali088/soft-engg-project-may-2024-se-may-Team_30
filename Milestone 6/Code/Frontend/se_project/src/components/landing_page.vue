@@ -8,7 +8,7 @@
         <!-- Include the contentSidebar component -->
         <contentSidebar @change-video="updateVideoUrl"></contentSidebar>
         <ContentBox :video-url="videoUrl" :video-title="videoTitle"></ContentBox>
-        <chat></chat>
+        <chat :lec-id="lectureId"></chat>
     </div>
     
     
@@ -35,13 +35,16 @@ export default{
     data(){
       return {
         videoUrl: '', // Initiaize video url as an empty string.
-        videoTitle: ''
+        videoTitle: '',
+        lectureId: '',
       };
     },
     methods: {
-        updateVideoUrl(url, title){
+        updateVideoUrl(url, title, id){
             this.videoUrl = url; // Update the video URL when a link is clicked.
             this.videoTitle = title;
+            this.lectureId = id;
+            console.log(this.lectureId);
         }
     }
 };
