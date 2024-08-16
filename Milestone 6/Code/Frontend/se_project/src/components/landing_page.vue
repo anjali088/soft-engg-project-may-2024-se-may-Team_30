@@ -24,6 +24,7 @@ import chat from './chat.vue'
 
 export default{
     name: 'LandingPage',
+    
     components: {
         HeaderBar,
         SideBar,
@@ -31,12 +32,19 @@ export default{
         ContentBox,
         chat
     },
+    data(){
+      return {
+        url: '' // Initiaize video url as an empty string.
+      };
+    },
     methods: {
-        onItemClicked(item){
-            console.log("I am here ");
-            this.selectedItem = item;
+        onItemClicked(){
+            console.log('url');
         }
     }, 
+    created(){
+        this.onItemClicked();
+    }
 }
 </script>
 

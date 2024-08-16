@@ -12,7 +12,7 @@
         <iframe 
           width="560" 
           height="315" 
-          src="https://www.youtube.com/embed/hKm_rh1RTJQ?si=Hv5lfLf02ohjlW9h" 
+          :src="videoUrl" 
           frameborder="0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
@@ -24,6 +24,28 @@
   <script>
   export default {
     name: 'ContentBox',
+    data(){
+      return {
+        videoUrl: '' // Initiaize video url as an empty string.
+      };
+    },
+    methods: {
+      loadVideoUrl() {
+        console.log("video");
+        // Fetch the video URL from localStorage
+        const url = localStorage.getItem('url');
+        console.log(url);
+        if (url) {
+          this.videoUrl = url;
+        } else {
+          // Set a default URL or handle the case where no URL is found
+          this.videoUrl = 'https://www.youtube.com/embed/default_video_id';
+        }
+      }
+    },
+    created(){
+      this.loadVideoUrl();
+    }
   }
   </script>
   
