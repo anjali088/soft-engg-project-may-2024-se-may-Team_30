@@ -193,6 +193,14 @@ def get_lec_summary(lec_id):
     summary = ollama.generate(model='phi3', prompt=f'Give me a summary of this lecture: {lecture.transcript}')
     return jsonify({'summary': summary['response']})
 
+@app.route('/cust_chat/<int:lec_id>', methods=['POST'])
+def cust_chat(lec_id):
+    lecture = Lecture.query.get(lec_id)
+    data = request.get_json()
+    prompt = data.get('prompt')
+    bot_resp = ollama.generate(model='llama3', prompt=f'Help me on this topic: {lecture.title} by answering this question: {prompt}')
+    return jsonify({'bot_resp': bot_resp['response']})
+
 #For getting links
 @app.route('/get_links/<int:lec_id>', methods=['GET'])
 def get_lec_links(lec_id):
