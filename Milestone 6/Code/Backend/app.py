@@ -272,7 +272,7 @@ def get_content():
         content = Content.query.filter_by(week=week).first()
 
         # Create a list of dictionaries with id and title for items in the current week
-        items = [{"id": lec.lec_id, "title": lec.title, "video_url": lec.video_url} for lec in lectures] + \
+        items = [{"id": lec.lec_id, "title": lec.title, 'video_url': lec.video_url} for lec in lectures] + \
                 [{"id": assign.assign_id, "title": assign.title} for assign in assignments]
 
         # Add the current week section to the sections list
