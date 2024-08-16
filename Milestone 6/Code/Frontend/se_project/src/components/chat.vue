@@ -55,9 +55,19 @@ export default {
     sendMessage() {
       if (this.newMessage.trim() !== '') {
         this.messages.push({ text: this.newMessage, sender: 'user' });
-        this.newMessage = '';
-        this.simulateAiResponse();
-        this.scrollToBottom();
+        const lecId = localStorage.getItem('lec_id');
+        const path = `http://127.0.0.1:5000/cust_chat/${lecId}`;
+        const payload = { prompt: this.newMessage };
+
+        axios.post(path, payload)
+          .then((res) => {
+            this.response(res.data.bot_resp);
+            this.newMessage = '';
+            this.scrollToBottom();
+          })
+          .catch((error) => {
+            console.error("Error fetching summary:", error);
+          });
       }
     },
     response(res){
