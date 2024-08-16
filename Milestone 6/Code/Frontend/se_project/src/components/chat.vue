@@ -10,7 +10,7 @@
       <div v-if="!isMinimized">
         <div class="prefix-options">
           <button @click="handleSummaryClick">Summary</button>
-          <button @click="handleBClick">B</button>
+          <button @click="handleLinkClick">Get Links</button>
           <button @click="handleCClick">C</button>
           <button @click="handleDClick">D</button>
         </div>
@@ -48,7 +48,7 @@ export default {
       newMessage: '',
       messages: [],
       isMinimized: false,
-      prefixes: ['Summary', 'B', 'C', 'D'],
+      prefixes: ['Summary', 'Get Links', 'C', 'D'],
     };
   },
   methods: {
@@ -91,9 +91,22 @@ export default {
       // this.simulateAiResponse();
       this.scrollToBottom();
     },
-    handleBClick() {
-      this.messages.push({ text: 'B', sender: 'user' });
-      this.simulateAiResponse();
+    handleLinkClick() {
+      this.messages.push({ text: 'Generating Links', sender: 'user' });
+      const lecId = localStorage.getItem('lec_id');
+      const path = `http://127.0.0.1:5000/get_links/${lecId}`;
+      axios.get(path)
+        .then((res)=>{
+          const links = res.data.links.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+          // Iterate over each link and call this.response
+          links.forEach(link => {
+            this.response(link);
+          });
+          // this.response(res.data.links);
+        })
+        .catch((error)=>{
+          console.log("Error Generating links:", error);
+        })
       this.scrollToBottom();
     },
     handleCClick() {
