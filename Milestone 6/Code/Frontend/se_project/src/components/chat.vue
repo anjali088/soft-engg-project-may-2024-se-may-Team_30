@@ -61,7 +61,10 @@ export default {
 
         axios.post(path, payload)
           .then((res) => {
-            this.response(res.data.bot_resp);
+            const responses = res.data.bot_resp.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            responses.forEach(resp => {
+              this.response(resp);
+            })
             this.newMessage = '';
             this.scrollToBottom();
           })
@@ -93,7 +96,10 @@ export default {
       const path = `http://127.0.0.1:5000/get_summary/${lecId}`;
       axios.get(path)
         .then((res)=>{
-          this.response(res.data.summary);
+          const summary = res.data.summary.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+          summary.forEach(sum => {
+            this.response(sum);
+          });
         })
         .catch((error)=>{
           console.log("Error fetching summary:", error);
