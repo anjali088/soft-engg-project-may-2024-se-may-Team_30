@@ -4,4 +4,4 @@ flask_sqlalchemy
 flask_caching
 flask_jwt_extended
 flask_cors
-
+ollama
