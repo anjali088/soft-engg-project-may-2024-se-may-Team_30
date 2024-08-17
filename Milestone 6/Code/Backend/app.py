@@ -294,5 +294,49 @@ def get_content():
     return jsonify({"sections": sections}), 200
 
 
+@app.route('/feedbacks/<int:assign_id>', methods=['GET'])
+def get_user_feedbacks(assign_id):
+    user_id = 1
+    answered_questions = UserQuestion.query.filter_by(user_id=user_id, assignment_id=assign_id).all()
+    result = []
+    for answer in answered_questions:
+        if not answer.code_submission and not answer.is_correct:  # to check if it is a mcq type
+            question = Question.query.get(answer.question_id)
+            feedback = ollama.generate(model='llama3',
+                                       prompt=f' Give me a feedback why my ans is wrong. This is the option i selected: {answer.selected_answer}. This is the question: {question.question_text} This is the option: {question.options}')
+            result.append({
+                'question_text': question.question_text,
+                'options': question.options,
+                'selected_answer': answer.selected_answer,
+                'is_correct': answer.is_correct,
+                'correct_answer': question.correct_answer,
+                'feedback': feedback['response']
+            })
+        elif not answer.code_submission and answer.is_correct:  # to check if it is a mcq type
+            question = Question.query.get(answer.question_id)
+            # feedback = ollama.generate(model='llama3',prompt=f' Give me a feedback why my ans is wrong. This is the option i selected: {answer.selected_answer}. This is the question: {question.question_text} This is the option: {question.options}')
+            result.append({
+                'question_text': question.question_text,
+                'options': question.options,
+                'selected_answer': answer.selected_answer,
+                'is_correct': answer.is_correct,
+                'correct_answer': question.correct_answer,
+                #'feedback': feedback['response']
+            })
+
+        else:  # for coding type
+            question = Question.query.get(answer.question_id)
+            feedback = ollama.generate(model='llama3',
+                                       prompt=f' Give me a feedback on why my ans is wrong. This is the code i have written: {answer.code_submission}. This is the question: {question.question_text}')
+            result.append({
+                'question_text': question.question_text,
+                'selected_answer': answer.selected_answer,
+                'is_correct': answer.is_correct,
+                'correct_answer': question.correct_answer,
+                'feedback': feedback['response']
+            })
+    return jsonify(result), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)
