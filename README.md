@@ -71,15 +71,15 @@ The root directory contains the following folders:
 
 ## Contributors
 
-| Name                  | GitHub Profile                                   | Role or Contribution      |
-|-----------------------|--------------------------------------------------|---------------------------|
-| Anjali Panchal        | [@AnjaliPanchal](https://github.com/anjali088)   | Group leader, Frontend    |
-| Sahil Sandhu          | [@SahilSandhu](https://github.com/Sandhu16117)   | Frontend, Middleware      |
-| Abdul Ahad Rauf       | [@AbdulAhad](https://github.com/AbdulAhadRauf)   | Backend                   |
-| Sanket Metrewar       | [@SanketMetrewar](https://github.com/SanketM05)  | Backend, Research         |
-| Aman Verma            | [@AmanVerma](https://github.com/amanverma6376)   | Documentation, Research   |
-| Neon Thapa            | [@NeonThapa](https://github.com/NeonThapa)       | Documentation, Research   |
-| Pratham Sharma        | [@PrathamSharma](https://github.com/pratham1-s)  | Backend,Project Management|
-| Leo Tom               | [@LeoTom](https://github.com/select-case)        | Documentation             |
+| Name              | Roll Numbers | GitHub Profile                                   | Role or Contribution      |
+|-------------------|--------------|--------------------------------------------------|---------------------------|
+| Anjali Panchal    | 21F2000411   | [@AnjaliPanchal](https://github.com/anjali088)   | Group leader, Frontend    |
+| Sahil Sandhu      | 21F1002317   | [@SahilSandhu](https://github.com/Sandhu16117)   | Frontend, Middleware      |
+| Abdul Ahad Rauf   | 21F3002590   | [@AbdulAhad](https://github.com/AbdulAhadRauf)   | Backend                   |
+| Sanket Metrewar   | 21F3000961   | [@SanketMetrewar](https://github.com/SanketM05)  | Backend, Research         |
+| Aman Verma        | 21F1006376   | [@AmanVerma](https://github.com/amanverma6376)   | Documentation, Research   |
+| Neon Thapa        | 21F1000706   | [@NeonThapa](https://github.com/NeonThapa)       | Documentation, Research   |
+| Pratham Sharma    | 21F1006197   | [@PrathamSharma](https://github.com/pratham1-s)  | Backend,Project Management|
+| Leo Tom           | 21F1005835   | [@LeoTom](https://github.com/select-case)        | Documentation             |
 
 
