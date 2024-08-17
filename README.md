@@ -7,6 +7,7 @@ Team 30's project to integrate GenAI in Seek portal.
 -[ProjectStructure](#projectStructure)
 -[Installation](#installation)
 -[Usage](#usage)
+-[Contributors](#contributors)
 
 ## ProjectStructure
 
@@ -67,3 +68,18 @@ The root directory contains the following folders:
     ```bash
     localhost:8080/
     http://127.0.0.1:8080/
+
+## Contributors
+
+| Name                  | GitHub Profile                                   | Role or Contribution      |
+|-----------------------|--------------------------------------------------|---------------------------|
+| Anjali Panchal        | [@AnjaliPanchal](https://github.com/anjali088)   | Group leader, Frontend    |
+| Sahil Sandhu          | [@SahilSandhu](https://github.com/Sandhu16117)   | Frontend, Middleware      |
+| Abdul Ahad Rauf       | [@AbdulAhad](https://github.com/AbdulAhadRauf)   | Backend                   |
+| Sanket Metrewar       | [@SanketMetrewar](https://github.com/SanketM05)  | Backend, Research         |
+| Aman Verma            | [@AmanVerma](https://github.com/amanverma6376)   | Documentation, Research   |
+| Neon Thapa            | [@NeonThapa](https://github.com/NeonThapa)       | Documentation, Research   |
+| Pratham Sharma        | [@PrathamSharma](https://github.com/pratham1-s)  | Backend,Project Management|
+| Leo Tom               | [@LeoTom](https://github.com/select-case)        | Documentation             |
+
+
