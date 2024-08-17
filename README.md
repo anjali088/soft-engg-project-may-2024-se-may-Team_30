@@ -7,7 +7,6 @@ Team 30's project to integrate GenAI in Seek portal.
 -[ProjectStructure](#projectStructure)
 -[Installation](#installation)
 -[Usage](#usage)
--[API](#api)
 
 ## ProjectStructure
 
@@ -40,9 +39,31 @@ The root directory contains the following folders:
 
 ### Backend
 
-1. Navigate to the backend directory.
+1. Install all required dependancies.
+    ```bash
+    pip install -r requirements.txt
+2. Navigate to the backend directory.
     ```bash
     cd Milestone 6/Code/Backend
-2. Start the flask server.
+3. Start the flask server.
     ```bash
     python app.py
+
+### Frontend
+1. Navigate to frontend directory.
+    ```bash
+    cd Milestone 6/Code/Frontend/se_project
+2. Install the required dependancies.
+    ```bash
+    npm install
+3. Install axios for CORS.
+    ```bash
+    npm install axios
+4. Start the Vue development server.
+    ```bash
+    npm run serve
+
+5. Open chrome or any other browser and go to
+    ```bash
+    localhost:8080/
+    http://127.0.0.1:8080/
