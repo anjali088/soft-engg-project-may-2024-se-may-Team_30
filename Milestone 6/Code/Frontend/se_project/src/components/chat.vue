@@ -11,8 +11,8 @@
         <div class="prefix-options">
           <button @click="handleSummaryClick">Summary</button>
           <button @click="handleLinkClick">Get Links</button>
-          <button @click="handleCClick">C</button>
-          <button @click="handleDClick">D</button>
+          <!-- <button @click="handleCClick">C</button>
+          <button @click="handleDClick">D</button> -->
         </div>
         <div ref="chatMessages" class="chat-messages">
           <div v-for="(message, index) in messages" :key="index" :class="['chat-message', message.sender]">
@@ -48,7 +48,7 @@ export default {
       newMessage: '',
       messages: [],
       isMinimized: false,
-      prefixes: ['Summary', 'Get Links', 'C', 'D'],
+      prefixes: ['Summary', 'Get Links'],
     };
   },
   methods: {
@@ -61,6 +61,8 @@ export default {
 
         axios.post(path, payload)
           .then((res) => {
+            this.newMessage = '';
+            this.scrollToBottom();
             const responses = res.data.bot_resp.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             responses.forEach(resp => {
               this.response(resp);
