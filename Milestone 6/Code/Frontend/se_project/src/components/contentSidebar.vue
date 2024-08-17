@@ -44,8 +44,13 @@ export default {
     // Handle item click
     handleItemClick(url, title, id){
       // Emit am evemt to the parent component with the item's id and title
-      this.$emit('change-video', url, title, id); //Emit an event with the video url.
-      localStorage.setItem('lec_id', id);
+      if (url){
+        this.$emit('change-video', url, title, id, true); //Emit an event with the video url.
+        localStorage.setItem('lec_id', id);
+      }else{
+        this.$emit('change-video', url, title, id, false); //Emit an event with the video url.
+        localStorage.setItem('lec_id', id);
+      }
     },
     // Fetch content from the server
     getContent() {
