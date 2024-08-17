@@ -57,6 +57,7 @@
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
+    height: 700px;
   }
 
   /* Styles for each sidebar item */

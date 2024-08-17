@@ -10,8 +10,6 @@
         <ContentBox :video-url="videoUrl" :video-title="videoTitle" :is-Lecture="isLecture"></ContentBox>
         <chat :lec-id="lectureId"></chat>
     </div>
-    
-    
 </template>
 
 <script>
