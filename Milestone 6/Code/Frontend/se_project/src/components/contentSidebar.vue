@@ -87,7 +87,7 @@ export default {
 <style scoped>
 /* Styles for the sidebar container */
 .sidebar {
-  width: 250px;
+  width: 275px;
   border-right: 1px solid #ccc;
   padding: 10px;
 }
@@ -98,17 +98,59 @@ export default {
 }
 
 /* Styles for the section title, making it clickable */
-.section-title {
+/* .section-title {
   cursor: pointer;
   font-weight: bold;
   display: flex;
   justify-content: space-between;
   align-items: center;
+} */
+.section-title {
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between; /* Aligns text to the left */
+  align-items: center;
+  position: relative;
+  padding-bottom: 10px; /* Adds some space between text and underline */
 }
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.3px; /* Thickness of the bold line */
+  background-color: rgba(0, 0, 0, 0.618); /* Color of the line */
+  font-weight: bold; /* Ensures the line is bold */
+}
+
 
 /* Styles for the section content */
 .section-content {
-  padding-left: 10px;
+  padding-left: 0px;
   margin-top: 5px;
+  list-style-type: none; /* Removes the bullet points */
 }
+
+.section-content li {
+  position: relative;
+  padding-bottom: 10px; /* Adds space between text and the underline */
+  margin-bottom: 10px; /* Adds space between the line and the next item */
+  text-align: left; /* Aligns the text to the leftmost side */
+}
+
+.section-content li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px; /* Thickness of the line */
+  background-color: rgba(0, 0, 0, 0.539); /* Color of the line */
+}
+
+
+
 </style>

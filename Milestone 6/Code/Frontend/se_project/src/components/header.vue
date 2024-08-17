@@ -8,11 +8,11 @@
       </div>
       <!-- center part of the header with a text span -->
       <div class="header-center">
-        <span>May 2024 - Software Engineering</span>
+        <span><b>May 2024 - Software Engineering</b></span>
       </div>
       <!-- Right side of the header containing the email and sign-out icon -->
       <div class="header-right">
-        <span>21f1002317@ds.study.iitm.ac.in</span>
+        <span><b>21f1111111@ds.study.iitm.ac.in</b></span>
         <i class="fas fa-sign-out-alt"></i>
       </div>
     </div>
@@ -41,6 +41,12 @@
     display: flex;
     align-items: center;
   }
+
+  /* Styles for the right side of the header */
+  .header-right span {
+  margin-right: 10px; /* Adjust the value as needed */
+  }
+
   
   /* Styles for the logo image */
   .logo {

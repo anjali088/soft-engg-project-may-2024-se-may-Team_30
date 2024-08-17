@@ -41,12 +41,11 @@
   
   <style scoped>
   .content-box {
-    padding: 20px;
     background-color: #fff;
     /* border: 1px solid #ccc; */
     border-radius: 8px;
     max-width: 800px;
-    margin: 20px auto;
+    margin: 0px auto;
   }
   
   .content-title {
