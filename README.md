@@ -81,5 +81,3 @@ The root directory contains the following folders:
 | Neon Thapa        | 21F1000706   | [@NeonThapa](https://github.com/NeonThapa)       | Documentation, Research   |
 | Pratham Sharma    | 21F1006197   | [@PrathamSharma](https://github.com/pratham1-s)  | Backend,Project Management|
 | Leo Tom           | 21F1005835   | [@LeoTom](https://github.com/select-case)        | Documentation             |
-
-
